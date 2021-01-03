@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-col items-center h-screen todo-app mt-36">
+    <div class="flex flex-col items-center h-screen mt-24 todo-app">
         <h1 class="mb-4 text-6xl text-red-300">
             todos
         </h1>
-        <div class="relative w-1/4 overflow-hidden bg-white border border-gray-200 shadow-lg">
+        <div class="relative w-full overflow-hidden bg-white border border-gray-200 shadow-lg xl:w-1/2 2xl:w-1/4">
             <div class="relative h-20 border-b shadow-inner-b">
                 <div class="absolute text-2xl text-gray-300 transform -translate-y-1/2 cursor-pointer left-5 top-1/2">
                     <span class="block transform rotate-90">❯</span>
