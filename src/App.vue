@@ -5,7 +5,7 @@
         </h1>
         <div class="relative w-full overflow-hidden bg-white border border-gray-200 shadow-lg xl:w-1/2 2xl:w-1/4">
             <div class="relative h-20 border-b shadow-inner-b">
-                <div class="absolute text-2xl text-gray-300 transform -translate-y-1/2 cursor-pointer left-5 top-1/2">
+                <div class="absolute text-2xl text-gray-300 transform -translate-y-1/2 left-5 top-1/2">
                     <span class="block transform rotate-90">❯</span>
                 </div>
                 <input
@@ -27,7 +27,7 @@
                 />
             </transition-group>
             <div class="relative flex justify-between px-4 py-3 text-sm text-gray-500">
-                <span>1 item left</span>
+                <span>{{ active.length }} item left</span>
                 <div class="absolute flex space-x-3 transform list-filters left-1/2 -translate-x-2/4">
                     <button :class="{ 'border' : visibility == 'all' }" class="px-2 border-gray-300 rounded" @click="visibility = 'all'">
                         All
