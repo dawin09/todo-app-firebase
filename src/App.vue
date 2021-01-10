@@ -17,15 +17,14 @@
                 >
             </div>
             <transition-group name="slide-right" mode="out-in">
-                <template v-for="todo in filteredList">
-                    <todo-item
-                        :key="todo.id"
-                        :todo="todo"
-                        @toggle-completed="toggleCompleted"
-                        @delete-todo="deleteTodo"
-                        @edit-todo="editTodo"
-                    />
-                </template>
+                <todo-item
+                    v-for="todo in filteredList"
+                    :key="todo.id"
+                    :todo="todo"
+                    @toggle-completed="toggleCompleted"
+                    @delete-todo="deleteTodo"
+                    @edit-todo="editTodo"
+                />
             </transition-group>
             <div class="relative flex justify-between px-4 py-3 text-sm text-gray-500">
                 <span>1 item left</span>
@@ -48,10 +47,11 @@
     </div>
 </template>
 
-<script>
-
+<script lang="ts">
+import { defineComponent } from "vue";
 import Firebase from "firebase/app";
 import "firebase/database";
+import { Todo } from "./types/todo";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDSlzi-R46ww9LPYPl0OtuSL2aiP7ICtF8",
@@ -66,11 +66,12 @@ const firebaseConfig = {
 const app = Firebase.initializeApp(firebaseConfig);
 const db = app.database();
 const todosRef = db.ref("todos");
+import TodoItem from "./components/todo-item.vue";
 
-export default {
+export default defineComponent({
     name: "TodoApp",
     components: {
-        TodoItem: () => import(/* webpackChunkName: "todo-item" */ "./components/todo-item")
+        TodoItem
     },
     firebase: {
         todos: todosRef
@@ -79,48 +80,55 @@ export default {
         return {
             visibility: "all",
             newTodo: "",
-            todos: []
+            todos: [] as Todo[]
         }
     },
     computed: {
-        filteredList() {
+        filteredList(): Todo[] {
+            // @ts-ignore
             return this[this.visibility];
         },
-        all() {
+        all(): Todo[] {
             return this.todos;
         },
-        active() {
+        active(): Todo[] {
             return this.todos.filter(todo => !todo.isCompleted);
         },
-        completed() {
+        completed(): Todo[] {
             return this.todos.filter(todo => todo.isCompleted);
         }
     },
     methods: {
-        toggleCompleted(todoId, value) {
+        getRand(): string {
+            return new Date().getTime().toString() + Math.floor(Math.random() * 1000000);
+        },
+        toggleCompleted(todoId: string, value: boolean): void {
             todosRef.child(todoId).update({ isCompleted: value })
         },
-        addTodo() {
-            if (this.newTodo != "") {
-                todosRef.push({ isCompleted: false, title: this.newTodo }).then((addedTodo) => {
-                    addedTodo.update({ id: addedTodo.key })
-                });
+        addTodo(): void {
+            if (this.newTodo) {
+                const newTodo: Todo = {
+                    isCompleted: false,
+                    title: this.newTodo,
+                    id: `todo-${this.getRand()}`
+                }
+                todosRef.child(newTodo.id).set(newTodo);
                 this.newTodo = "";
             }
         },
-        editTodo(todoId, value) {
-            todosRef.child(todoId).update({ title: value})
+        editTodo(todoId: string, value: string): void {
+            todosRef.child(todoId).update({ title: value })
         },
-        deleteTodo(todoId) {
+        deleteTodo(todoId: string): void {
             todosRef.child(todoId).remove();
         },
-        clearCompleted() {
+        clearCompleted(): void {
             this.completed.forEach(completedTodo => {
                 this.deleteTodo(completedTodo.id);
             });
         }
     }
-}
+});
 </script>
 
 <style>
@@ -131,7 +139,7 @@ export default {
 .slide-right-enter-active, .slide-right-leave-active {
     transition: all .5s;
 }
-.slide-right-enter, .slide-right-leave-to {
+.slide-right-enter-from, .slide-right-leave-to {
     opacity: 0;
     transform: translateX(-50px);
 }
