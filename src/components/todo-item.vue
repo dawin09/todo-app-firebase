@@ -107,7 +107,7 @@ export default defineComponent({
         }
     }
 
-    &:hover {
+    &:hover:not(.editing) {
         .todo-actions {
             display: flex;
         }
