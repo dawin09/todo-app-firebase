@@ -1,11 +1,8 @@
-/* ./assets/css/tailwind.css */
+/* ./src/index.css */
+
+/*! @import */
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities
 
-@layer base {
-    button:focus,
-    input:focus {
-        @apply outline-none;
-    }
-}
+

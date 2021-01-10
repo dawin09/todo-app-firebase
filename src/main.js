@@ -1,13 +1,6 @@
-import Vue from "vue"
-import App from "./App.vue"
+import { createApp } from "vue";
+import App from "./App.vue";
 import "./index.css";
-
-import { rtdbPlugin } from "vuefire"
-
-Vue.use(rtdbPlugin)
-
-Vue.config.productionTip = false
-
-new Vue({
-    render: h => h(App)
-}).$mount("#app")
+import { rtdbPlugin } from "vuefire";
+createApp(App).use(rtdbPlugin).mount("#app");
+//# sourceMappingURL=main.js.map

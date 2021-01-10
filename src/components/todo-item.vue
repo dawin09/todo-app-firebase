@@ -13,7 +13,7 @@
         <div class="relative flex-1 py-5">
             <label class="block w-full h-full pl-5 todo-title" @dblclick="showEditInput">{{ todo.title }}</label>
             <input
-                :id="`edit-todo-input-${todo.id}`"
+                ref="editTodoInput"
                 :value="todo.title"
                 type="text"
                 class="absolute top-0 left-0 hidden w-full h-full pl-5 border border-gray-400 shadow-inner"
@@ -32,12 +32,15 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from "vue";
+import { Todo } from "../types/todo";
+
+export default defineComponent({
     name: "TodoItem",
     props: {
         todo: {
-            type: Object,
+            type: Object as PropType<Todo>,
             required: true
         }
     },
@@ -48,24 +51,24 @@ export default {
     },
     methods: {
         toggleCompleted() {
-            this.$emit("toggle-completed", this.todo.id, !this.todo.isCompleted)
+            this.$emit("toggle-completed", this.todo.id, !this.todo.isCompleted);
         },
         showEditInput() {
-            const input = document.querySelector(`#edit-todo-input-${this.todo.id}`);
             this.isEditing = true;
             this.$nextTick(() => {
+                const input = this.$refs.editTodoInput as HTMLInputElement;
                 input.focus();
             })
         },
-        editTodo(value) {
-            if (value != "") {
+        editTodo(value: string) {
+            if (value) {
                 this.$emit("edit-todo", this.todo.id, value);
                 this.isEditing = false;
             }
         },
-        doneEditing(value) {
+        doneEditing(value: string) {
             this.isEditing = false;
-            if (value != "") {
+            if (value) {
                 this.editTodo(value);
             }
         },
@@ -73,7 +76,7 @@ export default {
             this.$emit("delete-todo", this.todo.id);
         }
     }
-}
+})
 </script>
 
 <style lang="scss">
@@ -92,7 +95,7 @@ export default {
     &.is-completed {
         input[type=checkbox] + div {
             border-color: #5dc2af;
-            background-image: url("~@assets/img/icons/tick.svg");
+            /* background-image: url("~@assets/img/icons/tick.svg"); */
             background-size: 60%;
             background-repeat: no-repeat;
             background-position: center;

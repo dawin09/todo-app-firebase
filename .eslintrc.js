@@ -3,11 +3,13 @@ module.exports = {
   env: {
       node: true
   },
-  extends: [
-      "eslint:recommended",
-      "plugin:vue/recommended"
+  'extends': [
+    'plugin:vue/vue3-essential',
+    'eslint:recommended',
+    '@vue/typescript/recommended'
   ],
   rules: {
+      "@typescript-eslint/ban-ts-ignore": "off",
       "array-bracket-newline": ["error", "consistent"],
       "array-bracket-spacing": ["error"],
       "array-element-newline": ["error", "consistent"],
@@ -74,9 +76,6 @@ module.exports = {
               "allowFirstLine": false
           }
       }]
-  },
-  parserOptions: {
-      parser: "babel-eslint"
   },
   globals: {
       accounting: true,
