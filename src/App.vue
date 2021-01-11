@@ -106,7 +106,7 @@ export default defineComponent({
             todosRef.child(todoId).update({ isCompleted: value })
         },
         addTodo(): void {
-            if (this.newTodo) {
+            if (!this.newTodo) {
                 return;
             }
             const newTodo: Todo = {
