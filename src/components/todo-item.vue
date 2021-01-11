@@ -5,7 +5,7 @@
                 :checked="todo.isCompleted"
                 type="checkbox"
                 name="todo-item"
-                class="absolute w-full h-full opacity-0"
+                class="absolute w-full h-full opacity-0 cursor-pointer"
                 @input="toggleCompleted"
             >
             <div class="w-full h-full border border-gray-400 rounded-full" />
@@ -17,8 +17,8 @@
                 :value="todo.title"
                 type="text"
                 class="absolute top-0 left-0 hidden w-full h-full pl-5 border border-gray-400 shadow-inner"
-                @keyup.enter="editTodo($event.target.value)"
-                @blur="editTodo($event.target.value)"
+                @keyup.enter="editTodo($event.target.value.trim())"
+                @blur="editTodo($event.target.value.trim())"
             >
         </div>
         <div class="absolute items-center hidden space-x-3 text-xs text-white todo-actions right-5">
@@ -60,10 +60,10 @@ export default defineComponent({
                 input.focus();
             })
         },
-        editTodo(value: string) {
+        editTodo(todoTitle: string) {
             this.isEditing = false;
-            if (value.trim()) {
-                this.$emit("edit-todo", this.todo.id, value);
+            if (todoTitle && this.todo.title !== todoTitle) {
+                this.$emit("edit-todo", this.todo.id, todoTitle);
             }
         },
         deleteTodo() {
