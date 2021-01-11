@@ -18,7 +18,7 @@
                 type="text"
                 class="absolute top-0 left-0 hidden w-full h-full pl-5 border border-gray-400 shadow-inner"
                 @keyup.enter="editTodo($event.target.value)"
-                @blur="doneEditing($event.target.value)"
+                @blur="editTodo($event.target.value)"
             >
         </div>
         <div class="absolute items-center hidden space-x-3 text-xs text-white todo-actions right-5">
@@ -61,15 +61,9 @@ export default defineComponent({
             })
         },
         editTodo(value: string) {
-            if (value) {
-                this.$emit("edit-todo", this.todo.id, value);
-                this.isEditing = false;
-            }
-        },
-        doneEditing(value: string) {
             this.isEditing = false;
-            if (value) {
-                this.editTodo(value);
+            if (value.trim()) {
+                this.$emit("edit-todo", this.todo.id, value);
             }
         },
         deleteTodo() {
@@ -95,7 +89,7 @@ export default defineComponent({
     &.is-completed {
         input[type=checkbox] + div {
             border-color: #5dc2af;
-            /* background-image: url("~@assets/img/icons/tick.svg"); */
+            background-image: url("../assets/icons/tick.svg");
             background-size: 60%;
             background-repeat: no-repeat;
             background-position: center;
