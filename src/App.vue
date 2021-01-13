@@ -9,7 +9,7 @@
                     <span class="block transform rotate-90">❯</span>
                 </div>
                 <input
-                    v-model="newTodo"
+                    v-model.trim="newTodo"
                     type="text"
                     class="w-full h-full pl-16 text-2xl"
                     placeholder="What needs to be done?"
@@ -106,26 +106,25 @@ export default defineComponent({
             todosRef.child(todoId).update({ isCompleted: value })
         },
         addTodo(): void {
-            if (this.newTodo) {
-                const newTodo: Todo = {
-                    isCompleted: false,
-                    title: this.newTodo,
-                    id: `todo-${this.getRand()}`
-                }
-                todosRef.child(newTodo.id).set(newTodo);
-                this.newTodo = "";
+            if (!this.newTodo) {
+                return;
             }
+            const newTodo: Todo = {
+                isCompleted: false,
+                title: this.newTodo,
+                id: `todo-${this.getRand()}`
+            }
+            todosRef.child(newTodo.id).set(newTodo);
+            this.newTodo = "";
         },
-        editTodo(todoId: string, value: string): void {
-            todosRef.child(todoId).update({ title: value })
+        editTodo(todoId: string, title: string): void {
+            todosRef.child(todoId).update({ title });
         },
         deleteTodo(todoId: string): void {
             todosRef.child(todoId).remove();
         },
         clearCompleted(): void {
-            this.completed.forEach(completedTodo => {
-                this.deleteTodo(completedTodo.id);
-            });
+            this.completed.forEach(completedTodo => this.deleteTodo(completedTodo.id));
         }
     }
 });
