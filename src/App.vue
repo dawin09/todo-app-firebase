@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 import Firebase from "firebase/app";
 import "firebase/database";
 import { Todo } from "./types/todo";
@@ -66,12 +66,11 @@ const firebaseConfig = {
 const app = Firebase.initializeApp(firebaseConfig);
 const db = app.database();
 const todosRef = db.ref("todos");
-import TodoItem from "./components/todo-item.vue";
 
 export default defineComponent({
     name: "TodoApp",
     components: {
-        TodoItem
+        TodoItem: defineAsyncComponent(() => import("./components/todo-item.vue"))
     },
     firebase: {
         todos: todosRef

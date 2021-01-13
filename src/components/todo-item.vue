@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, nextTick } from "vue";
 import { Todo } from "../types/todo";
 
 export default defineComponent({
@@ -49,16 +49,16 @@ export default defineComponent({
             isEditing: false
         }
     },
+    emits: ["toggle-completed", "edit-todo", "delete-todo"],
     methods: {
         toggleCompleted() {
             this.$emit("toggle-completed", this.todo.id, !this.todo.isCompleted);
         },
-        showEditInput() {
+        async showEditInput() {
             this.isEditing = true;
-            this.$nextTick(() => {
-                const input = this.$refs.editTodoInput as HTMLInputElement;
-                input.focus();
-            })
+            await nextTick();
+            const input = this.$refs.editTodoInput as HTMLInputElement;
+            input.focus();
         },
         editTodo(todoTitle: string) {
             this.isEditing = false;
