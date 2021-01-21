@@ -159,6 +159,14 @@ export default defineComponent({
             this.completed.forEach(completedTodo => {
                 this.deleteTodo(completedTodo.id);
             });
+        },
+        logout() {
+            firebaseApp.auth().signOut();
+            this.user = {
+                name: "",
+                email: "",
+                uid: ""
+            };
         }
     }
 });
