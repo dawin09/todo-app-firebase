@@ -9,7 +9,7 @@ module.exports = {
         "@vue/typescript/recommended"
     ],
     rules: {
-        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
         "array-bracket-newline": ["error", "consistent"],
         "array-bracket-spacing": ["error"],
         "array-element-newline": ["error", "consistent"],

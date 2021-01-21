@@ -52,13 +52,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 import { Todo } from "./types/todo";
 import firebaseApp from "./config/firebase.ts";
 
 const db = firebaseApp.database();
 import AuthForm from "./components/auth-form.vue";
-import TodoItem from "./components/todo-item.vue";
 
 interface User {
     name: string;
@@ -70,7 +69,7 @@ export default defineComponent({
     name: "TodoApp",
     components: {
         AuthForm,
-        TodoItem
+        TodoItem: defineAsyncComponent(() => import("./components/todo-item.vue"))
     },
     data() {
         return {
@@ -111,6 +110,7 @@ export default defineComponent({
         }
     },
     created() {
+        // this.logout()
         this.setUser();
     },
     methods: {
@@ -148,6 +148,7 @@ export default defineComponent({
                 db.ref(this.userTodosPath).child(newTodo.id).set(newTodo)
                 this.newTodo = "";
             }
+            this.newTodo = "";
         },
         editTodo(todoId: string, value: string): void {
             db.ref(this.userTodosPath).child(todoId).update({ title: value })
@@ -156,9 +157,7 @@ export default defineComponent({
             db.ref(this.userTodosPath).child(todoId).remove();
         },
         clearCompleted(): void {
-            this.completed.forEach(completedTodo => {
-                this.deleteTodo(completedTodo.id);
-            });
+            this.completed.forEach(completedTodo => this.deleteTodo(completedTodo.id));
         },
         logout() {
             firebaseApp.auth().signOut();
