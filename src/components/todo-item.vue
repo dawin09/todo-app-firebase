@@ -10,7 +10,7 @@
             >
             <div class="w-full h-full border border-gray-400 rounded-full" />
         </div>
-        <div class="relative flex-1 py-5">
+        <div class="relative flex-1 py-5 pr-5">
             <label class="block w-full h-full pl-5 todo-title" @dblclick="showEditInput">{{ todo.title }}</label>
             <input
                 ref="editTodoInput"
