@@ -1,53 +1,61 @@
 <template>
     <div class="flex flex-col items-center h-screen todo-app">
-        <div v-if="!isAppReady" class="absolute z-50 w-screen h-screen bg-white" />
-        <auth-form v-if="!isLoggedIn" />
-        <div v-else class="mt-24 todos-container xl:w-1/2 2xl:w-1/4">
-            <h1 class="mb-4 text-6xl text-center text-red-300">
-                to-dos
-            </h1>
-            <div class="relative w-full overflow-hidden bg-white border border-gray-200 shadow-lg">
-                <div class="relative h-20 border-b shadow-inner-b">
-                    <div class="absolute text-2xl text-gray-300 transform -translate-y-1/2 left-5 top-1/2">
-                        <span class="block transform rotate-90">❯</span>
+        <transition name="fade" mode="out-in">
+            <div v-if="!isAppReady" class="absolute z-50 w-screen h-screen bg-white" />
+        </transition>
+
+        <transition-group name="fade" mode="out-in">
+            <auth-form v-if="!isLoggedIn" />
+            <template v-else>
+                <nav-bar :user-email="user.email" @logout="logout" />
+                <div class="mt-36 todos-container xl:w-1/2 2xl:w-1/4">
+                    <h1 class="mb-4 text-6xl text-center text-indigo-500">
+                        to-dos
+                    </h1>
+                    <div class="relative w-full overflow-hidden bg-white border border-gray-200 shadow-lg">
+                        <div class="relative h-20 border-b shadow-inner-b">
+                            <div class="absolute text-2xl text-gray-300 transform -translate-y-1/2 left-5 top-1/2">
+                                <span class="block transform rotate-90">❯</span>
+                            </div>
+                            <input
+                                v-model="newTodo"
+                                type="text"
+                                class="w-full h-full pl-16 text-2xl"
+                                placeholder="What needs to be done?"
+                                @keyup.enter="addTodo"
+                            >
+                        </div>
+                        <transition-group name="slide-right" mode="out-in">
+                            <todo-item
+                                v-for="todo in filteredList"
+                                :key="todo.id"
+                                :todo="todo"
+                                @toggle-completed="toggleCompleted"
+                                @delete-todo="deleteTodo"
+                                @edit-todo="editTodo"
+                            />
+                        </transition-group>
+                        <div class="relative flex justify-between px-4 py-3 text-sm text-gray-500">
+                            <span>{{ active.length }} item left</span>
+                            <div class="absolute flex space-x-3 transform list-filters left-1/2 -translate-x-2/4">
+                                <button :class="{ 'border' : visibility == 'all' }" class="px-2 border-gray-300 rounded" @click="visibility = 'all'">
+                                    All
+                                </button>
+                                <button :class="{ 'border' : visibility == 'active' }" class="px-2 border-gray-300 rounded" @click="visibility = 'active'">
+                                    Active
+                                </button>
+                                <button :class="{ 'border' : visibility == 'completed' }" class="px-2 border-gray-300 rounded" @click="visibility = 'completed'">
+                                    Completed
+                                </button>
+                            </div>
+                            <button :class="{ 'hidden' : !completed.length }" class="hover:underline" @click="clearCompleted">
+                                Clear Completed
+                            </button>
+                        </div>
                     </div>
-                    <input
-                        v-model="newTodo"
-                        type="text"
-                        class="w-full h-full pl-16 text-2xl"
-                        placeholder="What needs to be done?"
-                        @keyup.enter="addTodo"
-                    >
                 </div>
-                <transition-group name="slide-right" mode="out-in">
-                    <todo-item
-                        v-for="todo in filteredList"
-                        :key="todo.id"
-                        :todo="todo"
-                        @toggle-completed="toggleCompleted"
-                        @delete-todo="deleteTodo"
-                        @edit-todo="editTodo"
-                    />
-                </transition-group>
-                <div class="relative flex justify-between px-4 py-3 text-sm text-gray-500">
-                    <span>{{ active.length }} item left</span>
-                    <div class="absolute flex space-x-3 transform list-filters left-1/2 -translate-x-2/4">
-                        <button :class="{ 'border' : visibility == 'all' }" class="px-2 border-gray-300 rounded" @click="visibility = 'all'">
-                            All
-                        </button>
-                        <button :class="{ 'border' : visibility == 'active' }" class="px-2 border-gray-300 rounded" @click="visibility = 'active'">
-                            Active
-                        </button>
-                        <button :class="{ 'border' : visibility == 'completed' }" class="px-2 border-gray-300 rounded" @click="visibility = 'completed'">
-                            Completed
-                        </button>
-                    </div>
-                    <button :class="{ 'hidden' : !completed.length }" class="hover:underline" @click="clearCompleted">
-                        Clear Completed
-                    </button>
-                </div>
-            </div>
-        </div>
+            </template>
+        </transition-group>
     </div>
 </template>
 
@@ -55,9 +63,9 @@
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Todo } from "./types/todo";
 import firebaseApp from "./config/firebase.ts";
-
 const db = firebaseApp.database();
 import AuthForm from "./components/auth-form.vue";
+import NavBar from "./components/nav-bar.vue";
 
 interface User {
     name: string;
@@ -69,7 +77,8 @@ export default defineComponent({
     name: "TodoApp",
     components: {
         AuthForm,
-        TodoItem: defineAsyncComponent(() => import("./components/todo-item.vue"))
+        TodoItem: defineAsyncComponent(() => import("./components/todo-item.vue")),
+        NavBar
     },
     data() {
         return {
@@ -110,7 +119,6 @@ export default defineComponent({
         }
     },
     created() {
-        // this.logout()
         this.setUser();
     },
     methods: {
@@ -182,5 +190,12 @@ export default defineComponent({
 .slide-right-enter-from, .slide-right-leave-to {
     opacity: 0;
     transform: translateX(-50px);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
