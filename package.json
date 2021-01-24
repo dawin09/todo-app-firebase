@@ -3,12 +3,12 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "lint:fix": "vue-cli-service lint --cache --fix"
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "lint:fix": "vue-cli-service lint --cache --fix"
     },
-        "dependencies": {
+    "dependencies": {
         "@vee-validate/rules": "^4.0.4",
         "core-js": "^3.6.5",
         "firebase": "^8.2.1",
@@ -16,7 +16,7 @@
         "vue": "^3.0.0",
         "vuefire": "^3.0.0-alpha.2"
     },
-        "devDependencies": {
+    "devDependencies": {
         "@tailwindcss/postcss7-compat": "^2.0.2",
         "@typescript-eslint/eslint-plugin": "^2.33.0",
         "@typescript-eslint/parser": "^2.33.0",
