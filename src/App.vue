@@ -133,7 +133,7 @@ export default defineComponent({
             })
         },
         getUserTodos(): void {
-            db.ref(this.userTodosPath).on("value", (snap: any) => {
+            db.ref(this.userTodosPath).on("value", (snap) => {
                 if (snap.val()) {
                     this.todos = Object.values(snap.val());
                 }
