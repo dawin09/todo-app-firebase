@@ -62,6 +62,7 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Todo } from "./types/todo";
+import firebase from "firebase/app";
 import firebaseApp from "./config/firebase";
 const db = firebaseApp.database();
 import AuthForm from "./components/auth-form.vue";
@@ -121,7 +122,7 @@ export default defineComponent({
     },
     methods: {
         setUser(): void {
-            firebaseApp.auth().onAuthStateChanged((user) => {
+            firebaseApp.auth().onAuthStateChanged((user: firebase.User | null) => {
                 this.isLoadingUserSession = false;
 
                 if (user) {
@@ -133,7 +134,7 @@ export default defineComponent({
             })
         },
         getUserTodos(): void {
-            db.ref(this.userTodosPath).on("value", (snap) => {
+            db.ref(this.userTodosPath).on("value", (snap: firebase.database.DataSnapshot) => {
                 if (snap.val()) {
                     this.todos = Object.values(snap.val());
                 }
