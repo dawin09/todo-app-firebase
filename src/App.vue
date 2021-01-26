@@ -29,7 +29,7 @@
                             <todo-item
                                 v-for="todo in filteredList"
                                 :key="todo.id"
-                                :todo="todo" items-center
+                                :todo="todo"
                                 @toggle-completed="toggleCompleted"
                                 @delete-todo="deleteTodo"
                                 @edit-todo="editTodo"
