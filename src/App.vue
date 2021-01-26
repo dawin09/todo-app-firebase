@@ -8,7 +8,7 @@
             <auth-form v-if="!isLoggedIn" key="auth-form" />
             <template v-else>
                 <nav-bar key="nav-bar" :user-email="user.email" @logout="logout" />
-                <div key="todos-box" class="mt-36 todos-container xl:w-1/2 2xl:w-1/4">
+                <div key="todos-box" class="mt-36 todos-container xl:w-1/2 2xl:w-1/3">
                     <h1 class="mb-4 text-6xl text-center text-indigo-500">
                         to-dos
                     </h1>
@@ -29,15 +29,15 @@
                             <todo-item
                                 v-for="todo in filteredList"
                                 :key="todo.id"
-                                :todo="todo"
+                                :todo="todo" items-center
                                 @toggle-completed="toggleCompleted"
                                 @delete-todo="deleteTodo"
                                 @edit-todo="editTodo"
                             />
                         </transition-group>
-                        <div class="relative flex justify-between px-4 py-3 text-sm text-gray-500">
+                        <div class="flex flex-col items-center justify-between px-4 py-3 text-sm text-gray-500 xl:flex-row">
                             <span>{{ active.length }} item left</span>
-                            <div class="absolute flex space-x-3 transform list-filters left-1/2 -translate-x-2/4">
+                            <div class="relative flex py-2 space-x-3 transform xl:py-0 xl:absolute list-filters xl:left-1/2 xl:-translate-x-2/4">
                                 <button :class="{ 'border' : visibility == 'all' }" class="px-2 border-gray-300 rounded" @click="visibility = 'all'">
                                     All
                                 </button>
