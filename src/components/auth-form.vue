@@ -75,14 +75,12 @@ export default defineComponent({
             firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
                 .catch((error: Error) => {
                     alert(error.message);
-                    console.log(error.message)
                 });
         },
         signUp(): void {
             firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
                 .catch((error: Error) => {
                     alert(error.message);
-                    console.log(error.message)
                 });
         }
     }
