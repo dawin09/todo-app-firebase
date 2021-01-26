@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <p class="mb-6 text-center">{{`${isLogin ? 'Dont' : 'Already'} have an account?`}} <button type="button" class="text-indigo-600" @click="isLogin = !isLogin">Sign {{ isLogin ? 'up' : 'in'}}</button></p>
+            <p class="mb-6 text-center">{{`${isLogin ? 'Don\'t' : 'Already'} have an account?`}} <button type="button" class="text-indigo-600" @click="isLogin = !isLogin">Sign {{ isLogin ? 'up' : 'in'}}</button></p>
             <div class="flex">
                 <div class="w-full px-3 mb-5">
                     <button class="block w-full max-w-xs px-3 py-3 mx-auto font-semibold text-white capitalize bg-indigo-500 rounded-lg hover:bg-indigo-700 focus:bg-indigo-700">{{ authLabel }}</button>
@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import firebaseApp from "../config/firebase.ts";
+import firebaseApp from "../config/firebase";
 import { Field, Form } from "vee-validate";
 
 export default defineComponent({
@@ -71,14 +71,17 @@ export default defineComponent({
         }
     },
     methods: {
-        signIn() {
-            firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password);
+        signIn(): void {
+            firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
+                .catch((error: Error) => {
+                    console.log(error.message)
+                });
         },
-        signUp() {
-            firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password);
-        },
-        isRequired(value: string) {
-            return value ? true : "This field is required";
+        signUp(): void {
+            firebaseApp.auth().createUserWithEmailAndPassword(this.email, this.password)
+                .catch((error: Error) => {
+                    console.log(error.message)
+                });
         }
     }
 })

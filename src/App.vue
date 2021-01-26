@@ -5,10 +5,10 @@
         </transition>
 
         <transition-group name="fade" mode="out-in">
-            <auth-form v-if="!isLoggedIn" />
+            <auth-form v-if="!isLoggedIn" key="auth-form" />
             <template v-else>
-                <nav-bar :user-email="user.email" @logout="logout" />
-                <div class="mt-36 todos-container xl:w-1/2 2xl:w-1/4">
+                <nav-bar key="nav-bar" :user-email="user.email" @logout="logout" />
+                <div key="todos-box" class="mt-36 todos-container xl:w-1/2 2xl:w-1/4">
                     <h1 class="mb-4 text-6xl text-center text-indigo-500">
                         to-dos
                     </h1>
@@ -62,15 +62,14 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Todo } from "./types/todo";
-import firebaseApp from "./config/firebase.ts";
+import firebaseApp from "./config/firebase";
 const db = firebaseApp.database();
 import AuthForm from "./components/auth-form.vue";
 import NavBar from "./components/nav-bar.vue";
 
-interface User {
-    name: string;
+interface IUser {
     uid: string;
-    email: string;
+    email: string | null;
 }
 
 export default defineComponent({
@@ -88,10 +87,9 @@ export default defineComponent({
             newTodo: "",
             todos: [] as Todo[],
             user: {
-                name: "",
                 email: "",
                 uid: ""
-            }
+            } as IUser
         }
     },
     computed: {
@@ -122,8 +120,8 @@ export default defineComponent({
         this.setUser();
     },
     methods: {
-        setUser() {
-            firebaseApp.auth().onAuthStateChanged((user: User) => {
+        setUser(): void {
+            firebaseApp.auth().onAuthStateChanged((user) => {
                 this.isLoadingUserSession = false;
 
                 if (user) {
@@ -134,9 +132,12 @@ export default defineComponent({
                 }
             })
         },
-        getUserTodos() {
+        getUserTodos(): void {
             db.ref(this.userTodosPath).on("value", (snap: any) => {
-                this.todos = Object.values(snap.val());
+                if (snap.val()) {
+                    this.todos = Object.values(snap.val());
+                }
+
                 this.isLoadingTodos = false;
             });
         },
@@ -144,7 +145,7 @@ export default defineComponent({
             return new Date().getTime().toString() + Math.floor(Math.random() * 1000000);
         },
         toggleCompleted(todoId: string, value: boolean): void {
-            db.ref(this.userTodosPath).child(todoId).update({ isCompleted: value })
+            db.ref(this.userTodosPath).child(todoId).update({ isCompleted: value });
         },
         addTodo(): void {
             if (this.newTodo) {
@@ -158,8 +159,8 @@ export default defineComponent({
             }
             this.newTodo = "";
         },
-        editTodo(todoId: string, value: string): void {
-            db.ref(this.userTodosPath).child(todoId).update({ title: value })
+        editTodo(todoId: string, title: string): void {
+            db.ref(this.userTodosPath).child(todoId).update({ title: title });
         },
         deleteTodo(todoId: string): void {
             db.ref(this.userTodosPath).child(todoId).remove();
@@ -167,13 +168,15 @@ export default defineComponent({
         clearCompleted(): void {
             this.completed.forEach(completedTodo => this.deleteTodo(completedTodo.id));
         },
-        logout() {
+        logout(): void {
             firebaseApp.auth().signOut();
+            this.visibility = "all";
+            this.newTodo = "";
+            this.todos = [] as Todo[];
             this.user = {
-                name: "",
                 email: "",
                 uid: ""
-            };
+            } as IUser
         }
     }
 });

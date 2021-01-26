@@ -16,6 +16,7 @@
 import { defineComponent } from "vue"
 export default defineComponent({
     name: "NavBar",
+    emits: ["logout"],
     props: {
         userEmail: {
             type: String,
