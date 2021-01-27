@@ -161,7 +161,7 @@ export default defineComponent({
             this.newTodo = "";
         },
         editTodo(todoId: string, title: string): void {
-            db.ref(this.userTodosPath).child(todoId).update({ title: title });
+            db.ref(this.userTodosPath).child(todoId).update({ title });
         },
         deleteTodo(todoId: string): void {
             db.ref(this.userTodosPath).child(todoId).remove();
