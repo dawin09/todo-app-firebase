@@ -34,13 +34,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, nextTick } from "vue";
-import { Todo } from "../types/todo";
+import { ITodo } from "../types/todo";
 
 export default defineComponent({
     name: "TodoItem",
     props: {
         todo: {
-            type: Object as PropType<Todo>,
+            type: Object as PropType<ITodo>,
             required: true
         }
     },

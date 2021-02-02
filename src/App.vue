@@ -61,17 +61,13 @@
 
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
-import { Todo } from "./types/todo";
+import { ITodo } from "./types/todo";
+import { IUser } from "./types/user";
 import firebase from "firebase/app";
 import firebaseApp from "./config/firebase";
 const db = firebaseApp.database();
 import AuthForm from "./components/auth-form.vue";
 import NavBar from "./components/nav-bar.vue";
-
-interface IUser {
-    uid: string;
-    email: string | null;
-}
 
 export default defineComponent({
     name: "TodoApp",
@@ -86,7 +82,7 @@ export default defineComponent({
             isLoadingTodos: true,
             visibility: "all",
             newTodo: "",
-            todos: [] as Todo[],
+            todos: [] as ITodo[],
             user: {
                 email: "",
                 uid: ""
@@ -94,17 +90,17 @@ export default defineComponent({
         }
     },
     computed: {
-        filteredList(): Todo[] {
+        filteredList(): ITodo[] {
             // @ts-ignore
             return this[this.visibility];
         },
-        all(): Todo[] {
+        all(): ITodo[] {
             return this.todos;
         },
-        active(): Todo[] {
+        active(): ITodo[] {
             return this.todos.filter(todo => !todo.isCompleted);
         },
-        completed(): Todo[] {
+        completed(): ITodo[] {
             return this.todos.filter(todo => todo.isCompleted);
         },
         isAppReady(): boolean {
@@ -150,7 +146,7 @@ export default defineComponent({
         },
         addTodo(): void {
             if (this.newTodo) {
-                const newTodo: Todo = {
+                const newTodo: ITodo = {
                     isCompleted: false,
                     title: this.newTodo,
                     id: `todo-${this.getRand()}`
@@ -173,7 +169,7 @@ export default defineComponent({
             firebaseApp.auth().signOut();
             this.visibility = "all";
             this.newTodo = "";
-            this.todos = [] as Todo[];
+            this.todos = [] as ITodo[];
             this.user = {
                 email: "",
                 uid: ""

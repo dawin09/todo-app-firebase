@@ -1,2 +1,2 @@
-import "./validator.ts";
-import "./firebase.ts";
+import "./validator";
+import "./firebase";

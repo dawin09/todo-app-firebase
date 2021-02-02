@@ -13,13 +13,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, PropType } from "vue";
+import { IUser } from "../types/user";
+
 export default defineComponent({
     name: "NavBar",
     emits: ["logout"],
     props: {
         userEmail: {
-            type: String,
+            type: String as PropType<IUser["email"]>,
             default: ""
         }
     }
