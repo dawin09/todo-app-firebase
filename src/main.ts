@@ -1,7 +1,7 @@
-import { createApp } from "vue"
-import App from "./App.vue"
+import { createApp } from "vue";
+import Root from "./App.vue";
 import "./index.css"
+import "./config";
 
-import { rtdbPlugin } from "vuefire"
-
-createApp(App).use(rtdbPlugin).mount("#app")
+const app = createApp(Root);
+app.mount("#app")

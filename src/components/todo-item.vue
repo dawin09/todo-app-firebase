@@ -10,7 +10,7 @@
             >
             <div class="w-full h-full border border-gray-400 rounded-full" />
         </div>
-        <div class="relative flex-1 py-5">
+        <div class="relative flex-1 py-5 pr-5">
             <label class="block w-full h-full pl-5 todo-title" @dblclick="showEditInput">{{ todo.title }}</label>
             <input
                 ref="editTodoInput"
@@ -34,13 +34,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, nextTick } from "vue";
-import { Todo } from "../types/todo";
+import { ITodo } from "../types/todo";
 
 export default defineComponent({
     name: "TodoItem",
     props: {
         todo: {
-            type: Object as PropType<Todo>,
+            type: Object as PropType<ITodo>,
             required: true
         }
     },
