@@ -4,7 +4,9 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
+        "dev": "vite",
+        "build": "tsc --noEmit && vite build",
+        "preview": "vite preview",
         "lint": "vue-cli-service lint",
         "lint:fix": "vue-cli-service lint --cache --fix"
     },
@@ -13,17 +15,18 @@
         "core-js": "^3.6.5",
         "firebase": "^8.2.1",
         "vee-validate": "^4.1.9",
-        "vue": "^3.0.0"
+        "vue": "^3.0.7"
     },
     "devDependencies": {
         "@tailwindcss/postcss7-compat": "^2.0.2",
         "@typescript-eslint/eslint-plugin": "^4.12.0",
         "@typescript-eslint/parser": "^4.12.0",
+        "@vitejs/plugin-vue": "^1.1.5",
         "@vue/cli-plugin-babel": "~4.5.10",
         "@vue/cli-plugin-eslint": "~4.5.10",
         "@vue/cli-plugin-typescript": "~4.5.10",
         "@vue/cli-service": "~4.5.10",
-        "@vue/compiler-sfc": "^3.0.5",
+        "@vue/compiler-sfc": "^3.0.7",
         "@vue/eslint-config-typescript": "^7.0.0",
         "autoprefixer": "^9.8.6",
         "eslint": "^7.17.0",
@@ -34,7 +37,8 @@
         "sass": "^1.32.2",
         "sass-loader": "^10.1.0",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
-        "typescript": "~4.1.3"
+        "typescript": "~4.1.3",
+        "vite": "^2.0.5"
     },
     "husky": {
         "hooks": {
